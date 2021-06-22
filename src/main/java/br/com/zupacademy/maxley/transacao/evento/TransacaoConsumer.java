@@ -7,6 +7,8 @@ import br.com.zupacademy.maxley.transacao.model.Transacao;
 import br.com.zupacademy.maxley.transacao.repository.CartaoRepository;
 import br.com.zupacademy.maxley.transacao.repository.EstabelecimentoRepository;
 import br.com.zupacademy.maxley.transacao.repository.TransacaoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,6 +25,8 @@ public class TransacaoConsumer {
     @Autowired
     private CartaoRepository cartaoRepository;
 
+    private Logger logger = LoggerFactory.getLogger(TransacaoConsumer.class);
+
     @Bean
     public JsonMessageConverter jsonMessageConverter(){
         return new JsonMessageConverter();
@@ -38,10 +42,6 @@ public class TransacaoConsumer {
         cartaoRepository.save(cartao);
         transacaoRepository.save(transacao);
 
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Estabelecimento: " + estabelecimento.toString());
-        System.out.println("Cartao: " + cartao.toString());
-        System.out.println("Transacao Evento: " + transacaoEvento.toString());
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        logger.info(transacao.toString());
     }
 }
